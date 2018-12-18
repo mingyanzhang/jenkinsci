@@ -1,6 +1,14 @@
 FROM openjdk:8-jdk
 
-RUN apt-get update && apt-get install -y git curl sudo vim ssh && rm -rf /var/lib/apt/lists/*
+LABEL com.example.version="0.0.1-beta"
+
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    sudo \ 
+    vim \
+    ssh \
+ && rm -rf /var/lib/apt/lists/* 
 
 
 ARG user=jenkins
@@ -29,9 +37,9 @@ RUN mkdir -p $JENKINS_HOME \
 RUN echo "umask 022" >> /etc/profile \
     &&echo "jenkins ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-RUN mkdir /var/log/jenkins
-RUN chown -R jenkins:jenkins /var/log/jenkins
-ADD log.properties $JENKINS_HOME/
+RUN mkdir /var/log/jenkins \
+    && chown -R jenkins:jenkins /var/log/jenkins
+COPY log.properties $JENKINS_HOME/
 
 # Set Timezone
 ENV TIME_ZONE Asia/Shanghai
