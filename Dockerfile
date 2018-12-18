@@ -21,8 +21,7 @@ ARG JENKINS_HOME=/var/jenkins_home
 
 ENV JENKINS_HOME $JENKINS_HOME
 ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
-ENV JAVA_OPTS="-Djava.util.logging.config.file=/var/jenkins_home/log.properties"
-ENV JENKINS_OPTS="--handlerCountMax=300 --logfile=/var/log/jenkins/jenkins.log"
+
 
 
 # Jenkins is run with user `jenkins`, uid = 1000
@@ -37,6 +36,9 @@ RUN mkdir -p $JENKINS_HOME \
 RUN echo "umask 022" >> /etc/profile \
     &&echo "jenkins ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# Set Jenkins logging
+ENV JAVA_OPTS="-Djava.util.logging.config.file=/var/jenkins_home/log.properties"
+ENV JENKINS_OPTS="--handlerCountMax=300 --logfile=/var/log/jenkins/jenkins.log"
 RUN mkdir /var/log/jenkins \
     && chown -R jenkins:jenkins /var/log/jenkins
 COPY log.properties $JENKINS_HOME/
