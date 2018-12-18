@@ -13,7 +13,7 @@ ARG JENKINS_HOME=/var/jenkins_home
 
 ENV JENKINS_HOME $JENKINS_HOME
 ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
-ARG JAVA_OPTS="-Djava.util.logging.config.file=/var/jenkins_home/log.properties"
+ENV JAVA_OPTS="-Djava.util.logging.config.file=/var/jenkins_home/log.properties"
 ENV JENKINS_OPTS="--handlerCountMax=300 --logfile=/var/log/jenkins/jenkins.log"
 
 
