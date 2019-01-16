@@ -18,6 +18,7 @@ ARG gid=1000
 ARG http_port=8080
 ARG agent_port=50000
 ARG JENKINS_HOME=/var/jenkins_home
+ARG USER_HOME=/home/jenkins
 
 ENV JENKINS_HOME $JENKINS_HOME
 ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
@@ -27,10 +28,10 @@ ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
 # Jenkins is run with user `jenkins`, uid = 1000
 # If you bind mount a volume from the host or a data container,
 # ensure you use the same uid
-RUN mkdir -p $JENKINS_HOME \
-  && chown ${uid}:${gid} $JENKINS_HOME \
+RUN mkdir -p $JENKINS_HOME $USER_HOME \
+  && chown ${uid}:${gid} $JENKINS_HOME $USER_HOME \
   && groupadd -g ${gid} ${group} \
-  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+  && useradd -d "$JENKINS_HOME" "$USER_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
 
 # Add jenkins account into sudoer list
 RUN echo "umask 022" >> /etc/profile \
@@ -99,6 +100,7 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 USER ${user}
 
+COPY .ssh $USER_HOME
 COPY jenkins-support /usr/local/bin/jenkins-support
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 COPY tini-shim.sh /bin/tini
