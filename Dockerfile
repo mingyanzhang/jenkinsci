@@ -31,7 +31,7 @@ ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
 RUN mkdir -p $JENKINS_HOME $USER_HOME \
   && chown ${uid}:${gid} $JENKINS_HOME $USER_HOME \
   && groupadd -g ${gid} ${group} \
-  && useradd -d "$JENKINS_HOME" "$USER_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+  && useradd -d "$JENKINS_HOME" -d "$USER_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
 
 # Add jenkins account into sudoer list
 RUN echo "umask 022" >> /etc/profile \
